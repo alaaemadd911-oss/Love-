@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>إلى ليلو ✨</title>
+    <style>
+        :root {
+            --soft-pink: #fff0f3;
+            --dark-pink: #ff4d6d;
+            --gold: #d4af37;
+        }
+
+        body {
+            margin: 0; padding: 0; background: var(--soft-pink);
+            height: 100vh; display: flex; justify-content: center; align-items: center;
+            overflow: hidden; font-family: 'Cairo', sans-serif;
+        }
+
+        /* تأثير النجوم والقلوب المتساقطة */
+        .particle {
+            position: absolute; top: -20px; pointer-events: none;
+            animation: fall linear forwards; z-index: 1;
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+
+        /* شاشة البداية الكيوت */
+        #start-screen {
+            position: absolute; z-index: 100; text-align: center;
+            cursor: pointer; transition: 1s ease-in-out;
+        }
+        .main-heart {
+            font-size: 100px; filter: drop-shadow(0 0 20px var(--dark-pink));
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .start-btn {
+            margin-top: 20px; padding: 10px 30px; background: white;
+            color: var(--dark-pink); border-radius: 25px; border: 2px solid var(--dark-pink);
+            font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* تصميم الكتاب الحديث */
+        .book {
+            width: 320px; height: 450px; position: relative;
+            transform-style: preserve-3d; display: none; z-index: 10;
+        }
+
+        .page {
+            width: 100%; height: 100%; position: absolute;
+            transform-origin: left; transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-style: preserve-3d; border-radius: 0 15px 15px 0;
+            box-shadow: inset 3px 0 10px rgba(0,0,0,0.05);
+        }
+        .page.flipped { transform: rotateY(-180deg); }
+
+        .front, .back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; display: flex;
+            justify-content: center; align-items: center;
+            background: white; border-radius: 0 15px 15px 0;
+            border: 1px solid #eee;
+        }
+        .back { transform: rotateY(180deg); border-radius: 15px 0 0 15px; }
+
+        /* الغلاف */
+        .cover { background: var(--dark-pink); color: white; flex-direction: column; }
+        .cover-heart { font-size: 60px; color: var(--gold); margin-bottom: 15px; }
+
+        /* الصور داخل الصفحات */
+        .page-img {
+            width: 85%; height: 85%; object-fit: cover;
+            border: 10px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* صفحة الرسالة */
+        .final-letter {
+            padding: 30px; text-align: center; color: #ad1457;
+            font-size: 1.1rem; line-height: 1.8; font-weight: 600;
+        }
+
+        .hide { opacity: 0; transform: scale(0.5); pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <audio id="music" loop>
+        <source src="https://www.chosic.com/wp-content/uploads/2021/04/And-So-It-Begins-Inspired-By-Crush-Music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="start-screen">
+        <div class="main-heart">💖</div>
+        <div class="start-btn">إضغطي هنا يا ليلو ✨</div>
+    </div>
+
+    <div class="book" id="book">
+        
+        <div class="page" id="p4">
+            <div class="front">
+                <div class="final-letter">
+                    إلى ليلو.. ❤️<br><br>
+                    بيقولوا إن أجمل القصص هي اللي بتبدأ بصدفة، وأنا وجودك في حياتي أجمل صدفة حصلتلي. كل صورة هنا هي حكاية بحبها معاكي.. دُمتِ لي شيئاً جميلاً لا ينتهي.✨
+                </div>
+            </div>
+            <div class="back cover"><div class="cover-heart">💖</div></div>
+        </div>
+
+        <div class="page" id="p3">
+            <div class="front"><img src="https://i.ibb.co/Q3z4Rzp9/image.jpg" class="page-img"></div>
+            <div class="back"><img src="https://i.ibb.co/CsJzM0pS/image.jpg" class="page-img"></div>
+        </div>
+
+        <div class="page" id="p2">
+            <div class="front"><img src="https://i.ibb.co/3yTWDQsn/image.jpg" class="page-img"></div>
+            <div class="back"><img src="https://i.ibb.co/1fj3tpzb/image.jpg" class="page-img"></div>
+        </div>
+
+        <div class="page" id="p1">
+            <div class="front cover">
+                <div class="cover-heart">💝</div>
+                <div style="letter-spacing: 2px; font-weight: bold;">حكايتنا</div>
+            </div>
+            <div class="back"><img src="https://i.ibb.co/2YthqqfP/image.jpg" class="page-img"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const startScreen = document.getElementById('start-screen');
+        const book = document.getElementById('book');
+        const music = document.getElementById('music');
+        const pages = [document.getElementById('p1'), document.getElementById('p2'), document.getElementById('p3'), document.getElementById('p4')];
+        let currentPage = 0;
+
+        startScreen.onclick = () => {
+            startScreen.classList.add('hide');
+            music.play();
+            setTimeout(() => {
+                startScreen.style.display = 'none';
+                book.style.display = 'block';
+            }, 1000);
+        };
+
+        book.onclick = () => {
+            if (currentPage < pages.length) {
+                pages[currentPage].classList.add('flipped');
+                pages[currentPage].style.zIndex = currentPage + 1;
+                currentPage++;
+            } else {
+                // حركة قفل الكتاب في الآخر
+                pages.forEach(p => p.classList.remove('flipped'));
+                currentPage = 0;
+            }
+        };
+
+        function createParticle() {
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.innerHTML = ['❤️','✨','🌸','⭐'][Math.floor(Math.random()*4)];
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.fontSize = (Math.random() * 10 + 15) + 'px';
+            p.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 4000);
+        }
+        setInterval(createParticle, 300);
+    </script>
+</body>
+</html>
